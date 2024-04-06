@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dot Catching Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: black; /* Set background color to black */
+        color: white; /* Set text color to white */
+    }
+    #game-area {
+        width: 400px;
+        height: 400px;
+        background-color: #f0f0f0;
+        position: relative;
+     
+    }
+    #note{
+color: rgb(158, 76, 76);
+    } 
+    .dot {
+        width: 20px;
+        height: 20px;
+        background-color: rgb(255, 96, 123);
+        border-radius: 50%;
+        position: absolute;
+        cursor: pointer;
+    }
+    #score {
+        color: blue; /* Set score count color to blue */
+        margin-bottom: 1px; /* Add margin to separate from the game area */
+    }
+    #creator-name {
+        margin-bottom: 5px; /* Add margin to separate from the score */
+        color: rgb(177, 29, 29);
+    }
+    #button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px; /* Add margin to separate from the game area */
+    }
+    #button-container button {
+        margin: 0 10px; /* Add margin between buttons */
+    }
+</style>
+</head>
+<body>
+
+<div id="creator-name"><h2>BY: Ayush Lohani</h2></div>
+<h2 id="player-name"></h2></div>
+ 
+<div id="score">Score: 0</div>
+<div id="note"><h4><i>(Click the pink dots to score more)</i></h4></div>
+<div id="game-area"></div>
+<br>
+<div id="timer">Time: 60</div>
+
+<div id="button-container">
+    <button id="reset">Reset</button>
+    <button id="stop">Stop</button>
+</div>
+
+<script>
+   const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const playerName = urlParams.get('input_name');
+
+        // Display player's name on the page
+        if (playerName) {
+            document.getElementById('player-name').textContent = `Player name: ${playerName}`;
+        }
+
+
+    
+    const gameArea = document.getElementById('game-area');
+    const scoreDisplay = document.getElementById('score');
+    const timerDisplay = document.getElementById('timer');
+    const resetButton = document.getElementById('reset');
+    const stopButton = document.getElementById('stop');
+
+    let score = 0;
+    let timeLeft = 60; // Game duration in seconds
+    let timerInterval;
+    let stopDots = false; // Variable to control dot appearance
+
+    function createDot() {
+        if (!stopDots) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            dot.style.left = `${Math.random() * (gameArea.offsetWidth - 20)}px`;
+            dot.style.top = `${Math.random() * (gameArea.offsetHeight - 20)}px`;
+            dot.addEventListener('click', () => {
+                score++;
+                updateScore();
+                gameArea.removeChild(dot);
+            });
+            gameArea.appendChild(dot);
+        }
+    }
+
+    function updateScore() {
+        scoreDisplay.innerText = `Score: ${score}`;
+    }
+
+    function updateTimer() {
+        timerDisplay.innerText = `Time: ${timeLeft}`;
+    }
+
+    function startGame() {
+        clearInterval(timerInterval);
+        score = 0;
+        timeLeft = 60;
+        updateScore();
+        updateTimer();
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimer();
+            if (timeLeft === 0) {
+                clearInterval(timerInterval);
+                alert(`Game over! Your score: ${score}`);
+            }
+        }, 1000);
+    }
+
+    function toggleGame() {
+        stopDots = !stopDots;
+        stopButton.innerText = stopDots ? 'Start' : 'Stop';
+    }
+
+    resetButton.addEventListener('click', () => {
+        location.reload(); // Reload the page when reset button is clicked
+    });
+
+    stopButton.addEventListener('click', toggleGame);
+
+    startGame();
+    setInterval(createDot, 1000);
+</script>
+
+</body>
+</html>

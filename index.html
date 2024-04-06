@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intro page</title>
+    <style>
+        body {
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 400px;
+            margin: 10px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+        }
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="button"] {
+            padding: 10px;
+            background-color: #0da552;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px; /* Added margin-top to create space between buttons */
+ 
+        }
+        input[type="submit"]  {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px; /* Added margin-top to create space between buttons */
+        }
+        input[type="submit"]:hover, input[type="button"]:hover {
+            background-color: #0056b3;
+        }
+        .creator-box {
+            background-color: rgba(0, 0, 0, 0.5); /* 50% transparent black */
+            color: aqua;
+            padding: px;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="creator-box">
+       <h4>Creator: Ayush Lohani
+        <br>
+        <br>
+        Click-Me Game
+    </h4> 
+ </div>
+    <br>
+    <center><input type="button" value="Play Music" onclick="toggleMusic()" style="margin-top: 20px;"></center>
+    <div class="container">
+        <form action="game.html" method="get"> 
+        <input type="text" name="input_name" placeholder="Enter your name">
+        <input type="submit" value="Start Game">
+        </form>
+    </div>
+
+    <script>
+        var audio = new Audio('music.mp3');
+        var musicPlaying = false;
+
+        function toggleMusic() {
+            if (!musicPlaying) {
+                audio.play();
+                document.querySelector('input[type="button"]').value = "Stop Music";
+            } else {
+                audio.pause();
+                audio.currentTime = 0;
+                document.querySelector('input[type="button"]').value = "Play Music";
+            }
+            musicPlaying = !musicPlaying;
+        }
+    </script>
+</body>
+</html>
