@@ -1,57 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dot Catching Game</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        background-color: black; /* Set background color to black */
-        color: white; /* Set text color to white */
-    }
-    #game-area {
-        width: 400px;
-        height: 400px;
-        background-color: #f0f0f0;
-        position: relative;
-     
-    }
-    #note{
-color: rgb(158, 76, 76);
-    } 
-    .dot {
-        width: 20px;
-        height: 20px;
-        background-color: rgb(255, 96, 123);
-        border-radius: 50%;
-        position: absolute;
-        cursor: pointer;
-    }
-    #score {
-        color: blue; /* Set score count color to blue */
-        margin-bottom: 1px; /* Add margin to separate from the game area */
-    }
-    #creator-name {
-        margin-bottom: 5px; /* Add margin to separate from the score */
-        color: rgb(177, 29, 29);
-    }
-    #button-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 20px; /* Add margin to separate from the game area */
-    }
-    #button-container button {
-        margin: 0 10px; /* Add margin between buttons */
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dot Catching Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: black; /* Set background color to black */
+            color: white; /* Set text color to white */
+        }
+        #game-area {
+            width: 400px;
+            height: 400px;
+            background-color: #f0f0f0;
+            position: relative;
+         
+        }
+        #note{
+            color: rgb(158, 76, 76);
+        } 
+        .dot {
+            width: 20px;
+            height: 20px;
+            background-color: rgb(255, 96, 123);
+            border-radius: 50%;
+            position: absolute;
+            cursor: pointer;
+        }
+        #score {
+            color: blue; /* Set score count color to blue */
+            margin-bottom: 1px; /* Add margin to separate from the game area */
+        }
+        #creator-name {
+            margin-bottom: 5px; /* Add margin to separate from the score */
+            color: rgb(177, 29, 29);
+        }
+        #button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px; /* Add margin to separate from the game area */
+        }
+        #button-container button {
+            margin: 0 10px; /* Add margin between buttons */
+        }
+    </style>
 </head>
 <body>
 
@@ -68,6 +68,15 @@ color: rgb(158, 76, 76);
     <button id="reset">Reset</button>
     <button id="stop">Stop</button>
 </div>
+
+<audio id="click-sound">
+    <source src="click.wav" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<audio id="op-sound">
+    <source src="op.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
 
 <script>
    const queryString = window.location.search;
@@ -86,6 +95,8 @@ color: rgb(158, 76, 76);
     const timerDisplay = document.getElementById('timer');
     const resetButton = document.getElementById('reset');
     const stopButton = document.getElementById('stop');
+    const clickSound = document.getElementById('click-sound');
+    const opSound = document.getElementById('op-sound');
 
     let score = 0;
     let timeLeft = 60; // Game duration in seconds
@@ -102,6 +113,7 @@ color: rgb(158, 76, 76);
                 score++;
                 updateScore();
                 gameArea.removeChild(dot);
+                playClickSound();
             });
             gameArea.appendChild(dot);
         }
@@ -136,11 +148,25 @@ color: rgb(158, 76, 76);
         stopButton.innerText = stopDots ? 'Start' : 'Stop';
     }
 
+    function playClickSound() {
+        clickSound.currentTime = 0;
+        clickSound.play();
+    }
+
+    function playOpSound() {
+        opSound.currentTime = 0;
+        opSound.play();
+    }
+
     resetButton.addEventListener('click', () => {
+        playOpSound();
         location.reload(); // Reload the page when reset button is clicked
     });
 
-    stopButton.addEventListener('click', toggleGame);
+    stopButton.addEventListener('click', () => {
+        playOpSound();
+        toggleGame();
+    });
 
     startGame();
     setInterval(createDot, 1000);
